@@ -19,12 +19,10 @@ class Compilador{
 			String codigo = backend.geraCodigo(arv);
 			System.out.println(codigo);
 
-			BufferedWriter buffWrite = new BufferedWriter(new FileWriter("codigo.txt")); 
-			buffWrite.append(codigo); 
-			buffWrite.close();
+			String[] aux = codigo.split("\n");
 			
 			Interpretador exec;
-			exec = new Interpretador("codigo.txt");
+			exec = new Interpretador(aux);
 
 
 		}catch(Exception e)

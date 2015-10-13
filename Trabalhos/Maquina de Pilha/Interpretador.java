@@ -6,13 +6,12 @@ class Interpretador{
 	private Stack<String> pilha;
 	private int resultado;
 
-	Interpretador(String codigo) throws IOException{
+	Interpretador(String[] codigo) throws IOException{
 		this.pilha = new Stack<String>();
-		BufferedReader buffRead = new BufferedReader(new FileReader(codigo));
 		this.resultado = 0;		
 		String linha = "";
-		linha = buffRead.readLine();
-		while(linha!=null){
+		for(int i = 0; i < codigo.length; i++){
+			linha = codigo[i];
 			if(linha.length()>=6){
 				String[] aux2;
 				//aux2 = "";
@@ -65,8 +64,6 @@ class Interpretador{
 				case("PRINT"):{System.out.println(this.pilha.pop());break;}
 				
 				}
-
-			linha = buffRead.readLine();
 		}
 	}
 
