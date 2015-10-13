@@ -1,0 +1,10 @@
+typedef struct Token {
+    int class;
+    char repr;
+} Token_Type;
+
+extern Token_Type Token;
+
+extern void start_lex(void);
+extern void get_next_token(void);
+
