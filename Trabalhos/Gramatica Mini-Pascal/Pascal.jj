@@ -57,9 +57,9 @@ TOKEN :
 |
   < DIGITOS: <DIGITO> (<DIGITO>)* >
 |
-  < FRAC_OP: ("." <DIGITOS>)? >
+  < FRAC_OP: ("." <DIGITOS>) >
 |
-  < EXP_OP: ("E" (<SINAL>)? <DIGITOS>)? >
+  < EXP_OP: ("E" <SINAL> <DIGITOS>) >
 |
   < SINAL: ("+" | "-") >
 |
@@ -67,7 +67,7 @@ TOKEN :
 |
  <OPERADOR_ADITIVO: ("+"| "-" | "or")>
 |
- < NUM: <DIGITOS> <FRAC_OP> <EXP_OP> >
+ < NUM: <DIGITOS> (<FRAC_OP>)? (<EXP_OP>)? >
 |
  <OPERADOR_RELACIONAL: ("=" | "<>" | "<" | "<=" | ">" | ">=") >
 }
@@ -179,7 +179,7 @@ void Enunciado():
 {}
 {
   Variavel() <ATRIB> Expressao() | Chamada_de_procedimento() | Enunciado_Composto()
-| <IF> Expressao() <THEN> Enunciado() <ELSE> Enunciado() | <WHILE> Expressao() <DO> Enunciado() 
+| <IF> Expressao() <THEN> Enunciado() <ELSE> Enunciado() | <WHILE> Expressao() <DO> Enunciado()
 }
 
 void Variavel():
