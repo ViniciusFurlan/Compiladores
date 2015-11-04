@@ -178,17 +178,17 @@ void Lista_de_enunciados2():
 void Enunciado():
 {}
 {
-  Variavel() <ATRIB> Expressao() | Chamada_de_procedimento() | Enunciado_Composto()
+  <ID> Enunciado2()| Enunciado_Composto()
 | <IF> Expressao() <THEN> Enunciado() <ELSE> Enunciado() | <WHILE> Expressao() <DO> Enunciado()
 }
 
-void Variavel():
+void Enunciado2()
 {}
 {
-  <ID> Variavel2()
+    Variavel() <ATRIB> Expressao() | Chamada_de_procedimento() 
 }
 
-void Variavel2():
+void Variavel():
 {}
 {
   (<LBRACKET> Expressao() <RBRACKET>)?
