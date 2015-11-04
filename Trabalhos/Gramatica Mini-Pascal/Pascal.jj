@@ -3,7 +3,7 @@ import java.io.*;
 public class Pascal {
 
   public static void main(String args[]) throws ParseException,IOException {
-    
+
     Pascal parser = new Pascal(new FileInputStream(args[0]));
     parser.Programa();
   }
@@ -76,13 +76,13 @@ TOKEN :
 
 void Programa () :
 {}
-{ <PROGRAM> <ID> 
-  <LBRACE> Lista_de_identificadores() <RBRACE> <SEMI> 
-   Declaracoes() 
+{ <PROGRAM> <ID>
+  <LBRACE> Lista_de_identificadores() <RBRACE> <SEMI>
+   Declaracoes()
    Declaracoes_de_subprogramas() Enunciado_Composto() "."
-  <EOF> 
+  <EOF>
 }
-	
+
 
 void Lista_de_identificadores():
 {}
@@ -129,7 +129,7 @@ void Declaracoes_de_subprograma():
 void Cabecalho_de_subprograma():
 {}
 {
-  <FUNCTION> <ID> Argumentos() <COLON> Tipo_Padrao() <SEMI> 
+  <FUNCTION> <ID> Argumentos() <COLON> Tipo_Padrao() <SEMI>
 | <PROCEDURE> <ID> Argumentos() <SEMI>
 }
 
@@ -154,7 +154,7 @@ void Lista_de_parametros2():
 void Enunciado_Composto():
 {}
 {
-  <BEGIN> Enunciados_opcionais() <END>  
+  <BEGIN> Enunciados_opcionais() <END>
 }
 
 void Enunciados_opcionais():
@@ -178,8 +178,8 @@ void Lista_de_enunciados2():
 void Enunciado():
 {}
 {
-  Variavel() <ATRIB> Expressao() | Chamada_de_procedimento() | Enunciado_Composto() 
-| <IF> Expressao() <THEN> Enunciado() <ELSE> Enunciado() <WHILE> Expressao() <DO> Enunciado() 
+  Variavel() <ATRIB> Expressao() | Chamada_de_procedimento() | Enunciado_Composto()
+| <IF> Expressao() <THEN> Enunciado() <ELSE> Enunciado() | <WHILE> Expressao() <DO> Enunciado() 
 }
 
 void Variavel():
