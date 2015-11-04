@@ -182,10 +182,10 @@ void Enunciado():
 | <IF> Expressao() <THEN> Enunciado() <ELSE> Enunciado() | <WHILE> Expressao() <DO> Enunciado()
 }
 
-void Enunciado2()
+void Enunciado2():
 {}
 {
-    Variavel() <ATRIB> Expressao() | Chamada_de_procedimento() 
+    Variavel() <ATRIB> Expressao() | Chamada_de_procedimento()
 }
 
 void Variavel():
