@@ -59,25 +59,25 @@ public interface PascalConstants {
   /** RegularExpression Id. */
   int NOT = 29;
   /** RegularExpression Id. */
-  int ID = 30;
+  int OPERADOR_MULTIPLICATIVO = 30;
   /** RegularExpression Id. */
-  int DIGITO = 31;
+  int OPERADOR_ADITIVO = 31;
   /** RegularExpression Id. */
-  int DIGITOS = 32;
+  int ID = 32;
   /** RegularExpression Id. */
-  int FRAC_OP = 33;
+  int OPERADOR_RELACIONAL = 33;
   /** RegularExpression Id. */
-  int EXP_OP = 34;
+  int NUM = 34;
   /** RegularExpression Id. */
-  int SINAL = 35;
+  int DIGITOS = 35;
   /** RegularExpression Id. */
-  int OPERADOR_MULTIPLICATIVO = 36;
+  int SINAL = 36;
   /** RegularExpression Id. */
-  int OPERADOR_ADITIVO = 37;
+  int DIGITO = 37;
   /** RegularExpression Id. */
-  int NUM = 38;
+  int FRACAO_OPCIONAL = 38;
   /** RegularExpression Id. */
-  int OPERADOR_RELACIONAL = 39;
+  int EXPOENTE_OPCIONAL = 39;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -112,19 +112,18 @@ public interface PascalConstants {
     "\"else\"",
     "\"while\"",
     "\"do\"",
-    "\"comma\"",
+    "\",\"",
     "\"not\"",
-    "<ID>",
-    "<DIGITO>",
-    "<DIGITOS>",
-    "<FRAC_OP>",
-    "<EXP_OP>",
-    "<SINAL>",
     "<OPERADOR_MULTIPLICATIVO>",
     "<OPERADOR_ADITIVO>",
-    "<NUM>",
+    "<ID>",
     "<OPERADOR_RELACIONAL>",
-    "\",\"",
+    "<NUM>",
+    "<DIGITOS>",
+    "<SINAL>",
+    "<DIGITO>",
+    "<FRACAO_OPCIONAL>",
+    "<EXPOENTE_OPCIONAL>",
   };
 
 }

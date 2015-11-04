@@ -17,7 +17,7 @@ public class Pascal implements PascalConstants {
     jj_consume_token(SEMI);
     Declaracoes();
     Declaracoes_de_subprogramas();
-    Enunciado_Composto();
+    Enunciado_composto();
     jj_consume_token(PERIOD);
     jj_consume_token(0);
   }
@@ -29,8 +29,8 @@ public class Pascal implements PascalConstants {
 
   static final public void Lista2() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case 40:
-      jj_consume_token(40);
+    case COMMA:
+      jj_consume_token(COMMA);
       jj_consume_token(ID);
       Lista2();
       break;
@@ -60,7 +60,7 @@ public class Pascal implements PascalConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEIRO:
     case REAL:
-      Tipo_Padrao();
+      Tipo_padrao();
       break;
     case ARRAY:
       jj_consume_token(ARRAY);
@@ -71,7 +71,7 @@ public class Pascal implements PascalConstants {
       jj_consume_token(NUM);
       jj_consume_token(RBRACKET);
       jj_consume_token(OF);
-      Tipo_Padrao();
+      Tipo_padrao();
       break;
     default:
       jj_la1[2] = jj_gen;
@@ -80,7 +80,7 @@ public class Pascal implements PascalConstants {
     }
   }
 
-  static final public void Tipo_Padrao() throws ParseException {
+  static final public void Tipo_padrao() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEIRO:
       jj_consume_token(INTEIRO);
@@ -111,7 +111,7 @@ public class Pascal implements PascalConstants {
   static final public void Declaracoes_de_subprograma() throws ParseException {
     Cabecalho_de_subprograma();
     Declaracoes();
-    Enunciado_Composto();
+    Enunciado_composto();
   }
 
   static final public void Cabecalho_de_subprograma() throws ParseException {
@@ -121,7 +121,7 @@ public class Pascal implements PascalConstants {
       jj_consume_token(ID);
       Argumentos();
       jj_consume_token(COLON);
-      Tipo_Padrao();
+      Tipo_padrao();
       jj_consume_token(SEMI);
       break;
     case PROCEDURE:
@@ -172,7 +172,7 @@ public class Pascal implements PascalConstants {
     }
   }
 
-  static final public void Enunciado_Composto() throws ParseException {
+  static final public void Enunciado_composto() throws ParseException {
     jj_consume_token(BEGIN);
     Enunciados_opcionais();
     jj_consume_token(END);
@@ -182,6 +182,7 @@ public class Pascal implements PascalConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case BEGIN:
     case IF:
+    case WHILE:
     case ID:
       Lista_de_enunciados();
       break;
@@ -212,14 +213,11 @@ public class Pascal implements PascalConstants {
   static final public void Enunciado() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ID:
-      Variavel();
-      jj_consume_token(ATRIB);
-      Expressao();
-      break;
-      Chamada_de_procedimento();
+      jj_consume_token(ID);
+      Enunciado2();
       break;
     case BEGIN:
-      Enunciado_Composto();
+      Enunciado_composto();
       break;
     case IF:
       jj_consume_token(IF);
@@ -228,6 +226,8 @@ public class Pascal implements PascalConstants {
       Enunciado();
       jj_consume_token(ELSE);
       Enunciado();
+      break;
+    case WHILE:
       jj_consume_token(WHILE);
       Expressao();
       jj_consume_token(DO);
@@ -240,12 +240,21 @@ public class Pascal implements PascalConstants {
     }
   }
 
-  static final public void Variavel() throws ParseException {
-    jj_consume_token(ID);
-    Variavel2();
+  static final public void Enunciado2() throws ParseException {
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case LBRACKET:
+    case ATRIB:
+      Variavel();
+      jj_consume_token(ATRIB);
+      Expressao();
+      break;
+    default:
+      jj_la1[11] = jj_gen;
+      Chamada_de_procedimento();
+    }
   }
 
-  static final public void Variavel2() throws ParseException {
+  static final public void Variavel() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LBRACKET:
       jj_consume_token(LBRACKET);
@@ -253,17 +262,12 @@ public class Pascal implements PascalConstants {
       jj_consume_token(RBRACKET);
       break;
     default:
-      jj_la1[11] = jj_gen;
+      jj_la1[12] = jj_gen;
       ;
     }
   }
 
   static final public void Chamada_de_procedimento() throws ParseException {
-    jj_consume_token(ID);
-    Chamada_de_procedimento2();
-  }
-
-  static final public void Chamada_de_procedimento2() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LBRACE:
       jj_consume_token(LBRACE);
@@ -271,7 +275,7 @@ public class Pascal implements PascalConstants {
       jj_consume_token(RBRACE);
       break;
     default:
-      jj_la1[12] = jj_gen;
+      jj_la1[13] = jj_gen;
       ;
     }
   }
@@ -288,13 +292,13 @@ public class Pascal implements PascalConstants {
       Expressao();
       break;
     default:
-      jj_la1[13] = jj_gen;
+      jj_la1[14] = jj_gen;
       ;
     }
   }
 
   static final public void Expressao() throws ParseException {
-    Expressao_Simples();
+    Expressao_simples();
     Expressao2();
   }
 
@@ -302,44 +306,44 @@ public class Pascal implements PascalConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case OPERADOR_RELACIONAL:
       jj_consume_token(OPERADOR_RELACIONAL);
-      Expressao_Simples();
+      Expressao_simples();
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[15] = jj_gen;
       ;
     }
   }
 
-  static final public void Expressao_Simples() throws ParseException {
+  static final public void Expressao_simples() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LBRACE:
     case NOT:
     case ID:
     case NUM:
       Termo();
-      Expressao_Simples2();
+      Expressao_simples2();
       break;
     case SINAL:
-      jj_consume_token(SINAL);
+      Sinal();
       Termo();
-      Expressao_Simples2();
+      Expressao_simples2();
       break;
     default:
-      jj_la1[15] = jj_gen;
+      jj_la1[16] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
-  static final public void Expressao_Simples2() throws ParseException {
+  static final public void Expressao_simples2() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case OPERADOR_ADITIVO:
       jj_consume_token(OPERADOR_ADITIVO);
       Termo();
-      Expressao_Simples2();
+      Expressao_simples2();
       break;
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[17] = jj_gen;
       ;
     }
   }
@@ -357,7 +361,7 @@ public class Pascal implements PascalConstants {
       Termo2();
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[18] = jj_gen;
       ;
     }
   }
@@ -381,7 +385,7 @@ public class Pascal implements PascalConstants {
       Fator();
       break;
     default:
-      jj_la1[18] = jj_gen;
+      jj_la1[19] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -395,9 +399,13 @@ public class Pascal implements PascalConstants {
       jj_consume_token(RBRACE);
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[20] = jj_gen;
       ;
     }
+  }
+
+  static final public void Sinal() throws ParseException {
+    jj_consume_token(SINAL);
   }
 
   static private boolean jj_initialized_once = false;
@@ -410,7 +418,7 @@ public class Pascal implements PascalConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[20];
+  static final private int[] jj_la1 = new int[21];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -418,10 +426,10 @@ public class Pascal implements PascalConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x0,0x100,0x100c0,0xc0,0xc00,0xc00,0x1000,0x4000,0x40900000,0x4000,0x40900000,0x20000,0x1000,0x10000000,0x0,0x60001000,0x0,0x0,0x60001000,0x1000,};
+      jj_la1_0 = new int[] {0x10000000,0x100,0x100c0,0xc0,0xc00,0xc00,0x1000,0x4000,0x4900000,0x4000,0x4900000,0x420000,0x20000,0x1000,0x10000000,0x0,0x20001000,0x80000000,0x40000000,0x20001000,0x1000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x100,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x80,0x48,0x20,0x10,0x40,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x1,0x0,0x0,0x0,0x0,0x2,0x15,0x0,0x0,0x5,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -442,7 +450,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -456,7 +464,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -473,7 +481,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -483,7 +491,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -499,7 +507,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -508,7 +516,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 20; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -559,12 +567,12 @@ public class Pascal implements PascalConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[41];
+    boolean[] la1tokens = new boolean[40];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < 21; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -576,7 +584,7 @@ public class Pascal implements PascalConstants {
         }
       }
     }
-    for (int i = 0; i < 41; i++) {
+    for (int i = 0; i < 40; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
