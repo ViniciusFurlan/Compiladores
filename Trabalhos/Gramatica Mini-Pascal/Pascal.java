@@ -18,7 +18,7 @@ public class Pascal implements PascalConstants {
     Declaracoes();
     Declaracoes_de_subprogramas();
     Enunciado_composto();
-    jj_consume_token(PERIOD);
+    jj_consume_token(35);
     jj_consume_token(0);
   }
 
@@ -29,8 +29,8 @@ public class Pascal implements PascalConstants {
 
   static final public void Lista2() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMMA:
-      jj_consume_token(COMMA);
+    case VIRG:
+      jj_consume_token(VIRG);
       jj_consume_token(ID);
       Lista2();
       break;
@@ -41,19 +41,26 @@ public class Pascal implements PascalConstants {
   }
 
   static final public void Declaracoes() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case VAR:
-      jj_consume_token(VAR);
-      Lista_de_identificadores();
-      jj_consume_token(COLON);
-      Tipo();
-      jj_consume_token(SEMI);
-      Declaracoes();
-      break;
-    default:
-      jj_la1[1] = jj_gen;
-      ;
+    label_1:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case VAR:
+        ;
+        break;
+      default:
+        jj_la1[1] = jj_gen;
+        break label_1;
+      }
+      Declaracao();
     }
+  }
+
+  static final public void Declaracao() throws ParseException {
+    jj_consume_token(VAR);
+    Lista_de_identificadores();
+    jj_consume_token(TWODOT);
+    Tipo();
+    jj_consume_token(SEMI);
   }
 
   static final public void Tipo() throws ParseException {
@@ -66,10 +73,7 @@ public class Pascal implements PascalConstants {
       jj_consume_token(ARRAY);
       jj_consume_token(LBRACKET);
       jj_consume_token(NUM);
-      jj_consume_token(PERIOD);
-      jj_consume_token(PERIOD);
-      jj_consume_token(NUM);
-      jj_consume_token(RBRACKET);
+      jj_consume_token(DOTDOT);
       jj_consume_token(OF);
       Tipo_padrao();
       break;
@@ -96,22 +100,25 @@ public class Pascal implements PascalConstants {
   }
 
   static final public void Declaracoes_de_subprogramas() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case FUNCTION:
-    case PROCEDURE:
-      Declaracoes_de_subprograma();
-      Declaracoes_de_subprogramas();
-      break;
-    default:
-      jj_la1[4] = jj_gen;
-      ;
-    }
+    Declaracao_de_subprograma();
   }
 
-  static final public void Declaracoes_de_subprograma() throws ParseException {
-    Cabecalho_de_subprograma();
-    Declaracoes();
-    Enunciado_composto();
+  static final public void Declaracao_de_subprograma() throws ParseException {
+    label_2:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case FUNCTION:
+      case PROCEDURE:
+        ;
+        break;
+      default:
+        jj_la1[4] = jj_gen;
+        break label_2;
+      }
+      Cabecalho_de_subprograma();
+      Enunciado_composto();
+      jj_consume_token(SEMI);
+    }
   }
 
   static final public void Cabecalho_de_subprograma() throws ParseException {
@@ -120,7 +127,7 @@ public class Pascal implements PascalConstants {
       jj_consume_token(FUNCTION);
       jj_consume_token(ID);
       Argumentos();
-      jj_consume_token(COLON);
+      jj_consume_token(TWODOT);
       Tipo_padrao();
       jj_consume_token(SEMI);
       break;
@@ -151,24 +158,19 @@ public class Pascal implements PascalConstants {
   }
 
   static final public void Lista_de_parametros() throws ParseException {
-    Lista_de_identificadores();
-    jj_consume_token(COLON);
-    Tipo();
-    Lista_de_parametros2();
-  }
-
-  static final public void Lista_de_parametros2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case SEMI:
-      jj_consume_token(SEMI);
+    label_3:
+    while (true) {
       Lista_de_identificadores();
-      jj_consume_token(COLON);
+      jj_consume_token(TWODOT);
       Tipo();
-      Lista_de_parametros2();
-      break;
-    default:
-      jj_la1[7] = jj_gen;
-      ;
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case ID:
+        ;
+        break;
+      default:
+        jj_la1[7] = jj_gen;
+        break label_3;
+      }
     }
   }
 
@@ -194,19 +196,18 @@ public class Pascal implements PascalConstants {
 
   static final public void Lista_de_enunciados() throws ParseException {
     Enunciado();
-    Lista_de_enunciados2();
-  }
-
-  static final public void Lista_de_enunciados2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case SEMI:
+    label_4:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case SEMI:
+        ;
+        break;
+      default:
+        jj_la1[9] = jj_gen;
+        break label_4;
+      }
       jj_consume_token(SEMI);
       Enunciado();
-      Lista_de_enunciados2();
-      break;
-    default:
-      jj_la1[9] = jj_gen;
-      ;
     }
   }
 
@@ -214,7 +215,43 @@ public class Pascal implements PascalConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ID:
       jj_consume_token(ID);
-      Enunciado2();
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LBRACKET:
+      case OPERADOR_DE_ATRIBUICAO:
+        label_5:
+        while (true) {
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case LBRACKET:
+            ;
+            break;
+          default:
+            jj_la1[10] = jj_gen;
+            break label_5;
+          }
+          jj_consume_token(LBRACKET);
+          Expressao();
+          jj_consume_token(RBRACKET);
+        }
+        jj_consume_token(OPERADOR_DE_ATRIBUICAO);
+        Expressao();
+        break;
+      default:
+        jj_la1[12] = jj_gen;
+        label_6:
+        while (true) {
+          switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+          case LBRACE:
+            ;
+            break;
+          default:
+            jj_la1[11] = jj_gen;
+            break label_6;
+          }
+          jj_consume_token(LBRACE);
+          Lista_de_expressoes();
+          jj_consume_token(RBRACE);
+        }
+      }
       break;
     case BEGIN:
       Enunciado_composto();
@@ -234,143 +271,202 @@ public class Pascal implements PascalConstants {
       Enunciado();
       break;
     default:
-      jj_la1[10] = jj_gen;
+      jj_la1[13] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
   }
 
-  static final public void Enunciado2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LBRACKET:
-    case ATRIB:
-      Variavel();
-      jj_consume_token(ATRIB);
-      Expressao();
-      break;
-    default:
-      jj_la1[11] = jj_gen;
-      Chamada_de_procedimento();
-    }
-  }
-
   static final public void Variavel() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LBRACKET:
+    jj_consume_token(ID);
+    label_7:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LBRACKET:
+        ;
+        break;
+      default:
+        jj_la1[14] = jj_gen;
+        break label_7;
+      }
       jj_consume_token(LBRACKET);
       Expressao();
       jj_consume_token(RBRACKET);
-      break;
-    default:
-      jj_la1[12] = jj_gen;
-      ;
     }
   }
 
   static final public void Chamada_de_procedimento() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LBRACE:
+    jj_consume_token(ID);
+    label_8:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case LBRACE:
+        ;
+        break;
+      default:
+        jj_la1[15] = jj_gen;
+        break label_8;
+      }
       jj_consume_token(LBRACE);
       Lista_de_expressoes();
       jj_consume_token(RBRACE);
-      break;
-    default:
-      jj_la1[13] = jj_gen;
-      ;
     }
   }
 
   static final public void Lista_de_expressoes() throws ParseException {
     Expressao();
-    Lista_de_expressoes2();
-  }
-
-  static final public void Lista_de_expressoes2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case COMMA:
-      jj_consume_token(COMMA);
+    label_9:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case VIRG:
+        ;
+        break;
+      default:
+        jj_la1[16] = jj_gen;
+        break label_9;
+      }
+      jj_consume_token(VIRG);
       Expressao();
-      break;
-    default:
-      jj_la1[14] = jj_gen;
-      ;
     }
   }
 
   static final public void Expressao() throws ParseException {
     Expressao_simples();
-    Expressao2();
-  }
-
-  static final public void Expressao2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case OPERADOR_RELACIONAL:
+    label_10:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case OPERADOR_RELACIONAL:
+        ;
+        break;
+      default:
+        jj_la1[17] = jj_gen;
+        break label_10;
+      }
       jj_consume_token(OPERADOR_RELACIONAL);
       Expressao_simples();
-      break;
-    default:
-      jj_la1[15] = jj_gen;
-      ;
     }
   }
 
   static final public void Expressao_simples() throws ParseException {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LBRACE:
-    case NOT:
-    case ID:
-    case NUM:
-      Termo();
-      Expressao_simples2();
-      break;
-    case SINAL:
-      Sinal();
-      Termo();
-      Expressao_simples2();
-      break;
-    default:
-      jj_la1[16] = jj_gen;
-      jj_consume_token(-1);
-      throw new ParseException();
-    }
-  }
-
-  static final public void Expressao_simples2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case OPERADOR_ADITIVO:
-      jj_consume_token(OPERADOR_ADITIVO);
-      Termo();
-      Expressao_simples2();
+    case 36:
+    case 37:
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 36:
+        jj_consume_token(36);
+        break;
+      case 37:
+        jj_consume_token(37);
+        break;
+      default:
+        jj_la1[18] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
       break;
     default:
-      jj_la1[17] = jj_gen;
+      jj_la1[19] = jj_gen;
       ;
+    }
+    Termo();
+    label_11:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case OR:
+      case 36:
+      case 37:
+        ;
+        break;
+      default:
+        jj_la1[20] = jj_gen;
+        break label_11;
+      }
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 36:
+        jj_consume_token(36);
+        break;
+      case 37:
+        jj_consume_token(37);
+        break;
+      case OR:
+        jj_consume_token(OR);
+        break;
+      default:
+        jj_la1[21] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case 36:
+      case 37:
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case 36:
+          jj_consume_token(36);
+          break;
+        case 37:
+          jj_consume_token(37);
+          break;
+        default:
+          jj_la1[22] = jj_gen;
+          jj_consume_token(-1);
+          throw new ParseException();
+        }
+        break;
+      default:
+        jj_la1[23] = jj_gen;
+        ;
+      }
+      Termo();
     }
   }
 
   static final public void Termo() throws ParseException {
     Fator();
-    Termo2();
-  }
-
-  static final public void Termo2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case OPERADOR_MULTIPLICATIVO:
+    label_12:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case OPERADOR_MULTIPLICATIVO:
+        ;
+        break;
+      default:
+        jj_la1[24] = jj_gen;
+        break label_12;
+      }
       jj_consume_token(OPERADOR_MULTIPLICATIVO);
       Fator();
-      Termo2();
-      break;
-    default:
-      jj_la1[18] = jj_gen;
-      ;
     }
   }
 
   static final public void Fator() throws ParseException {
+    label_13:
+    while (true) {
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case NOT:
+        ;
+        break;
+      default:
+        jj_la1[25] = jj_gen;
+        break label_13;
+      }
+      jj_consume_token(NOT);
+    }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ID:
       jj_consume_token(ID);
-      Fator2();
+      label_14:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case LBRACE:
+          ;
+          break;
+        default:
+          jj_la1[26] = jj_gen;
+          break label_14;
+        }
+        jj_consume_token(LBRACE);
+        Lista_de_expressoes();
+        jj_consume_token(RBRACE);
+      }
       break;
     case NUM:
       jj_consume_token(NUM);
@@ -380,32 +476,11 @@ public class Pascal implements PascalConstants {
       Expressao();
       jj_consume_token(RBRACE);
       break;
-    case NOT:
-      jj_consume_token(NOT);
-      Fator();
-      break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[27] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
-  }
-
-  static final public void Fator2() throws ParseException {
-    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LBRACE:
-      jj_consume_token(LBRACE);
-      Lista_de_expressoes();
-      jj_consume_token(RBRACE);
-      break;
-    default:
-      jj_la1[20] = jj_gen;
-      ;
-    }
-  }
-
-  static final public void Sinal() throws ParseException {
-    jj_consume_token(SINAL);
   }
 
   static private boolean jj_initialized_once = false;
@@ -418,7 +493,7 @@ public class Pascal implements PascalConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[21];
+  static final private int[] jj_la1 = new int[28];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -426,10 +501,10 @@ public class Pascal implements PascalConstants {
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x10000000,0x100,0x100c0,0xc0,0xc00,0xc00,0x1000,0x4000,0x4900000,0x4000,0x4900000,0x420000,0x20000,0x1000,0x10000000,0x0,0x20001000,0x80000000,0x40000000,0x20001000,0x1000,};
+      jj_la1_0 = new int[] {0x20000000,0x100,0x400c0,0xc0,0xc00,0xc00,0x1000,0x0,0x4a00000,0x4000,0x10000,0x1000,0x10000,0x4a00000,0x10000,0x1000,0x20000000,0x0,0x0,0x0,0x80000000,0x80000000,0x0,0x0,0x40000000,0x10000000,0x1000,0x81000,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x0,0x1,0x0,0x0,0x0,0x0,0x2,0x15,0x0,0x0,0x5,0x0,};
+      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x1,0x1,0x0,0x0,0x0,0x2,0x1,0x0,0x0,0x0,0x4,0x30,0x30,0x30,0x30,0x30,0x30,0x0,0x0,0x0,0x1,};
    }
 
   /** Constructor with InputStream. */
@@ -450,7 +525,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -464,7 +539,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -481,7 +556,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -491,7 +566,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -507,7 +582,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -516,7 +591,7 @@ public class Pascal implements PascalConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 21; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 28; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -567,12 +642,12 @@ public class Pascal implements PascalConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[40];
+    boolean[] la1tokens = new boolean[38];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 21; i++) {
+    for (int i = 0; i < 28; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
@@ -584,7 +659,7 @@ public class Pascal implements PascalConstants {
         }
       }
     }
-    for (int i = 0; i < 40; i++) {
+    for (int i = 0; i < 38; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

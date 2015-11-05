@@ -29,21 +29,21 @@ public interface PascalConstants {
   /** RegularExpression Id. */
   int SEMI = 14;
   /** RegularExpression Id. */
-  int COLON = 15;
+  int TWODOT = 15;
   /** RegularExpression Id. */
-  int ARRAY = 16;
+  int LBRACKET = 16;
   /** RegularExpression Id. */
-  int LBRACKET = 17;
+  int RBRACKET = 17;
   /** RegularExpression Id. */
-  int RBRACKET = 18;
+  int ARRAY = 18;
   /** RegularExpression Id. */
-  int PERIOD = 19;
+  int NUM = 19;
   /** RegularExpression Id. */
-  int BEGIN = 20;
+  int DOTDOT = 20;
   /** RegularExpression Id. */
-  int END = 21;
+  int BEGIN = 21;
   /** RegularExpression Id. */
-  int ATRIB = 22;
+  int END = 22;
   /** RegularExpression Id. */
   int IF = 23;
   /** RegularExpression Id. */
@@ -55,29 +55,19 @@ public interface PascalConstants {
   /** RegularExpression Id. */
   int DO = 27;
   /** RegularExpression Id. */
-  int COMMA = 28;
+  int NOT = 28;
   /** RegularExpression Id. */
-  int NOT = 29;
+  int VIRG = 29;
   /** RegularExpression Id. */
   int OPERADOR_MULTIPLICATIVO = 30;
   /** RegularExpression Id. */
-  int OPERADOR_ADITIVO = 31;
+  int OR = 31;
   /** RegularExpression Id. */
   int ID = 32;
   /** RegularExpression Id. */
-  int OPERADOR_RELACIONAL = 33;
+  int OPERADOR_DE_ATRIBUICAO = 33;
   /** RegularExpression Id. */
-  int NUM = 34;
-  /** RegularExpression Id. */
-  int DIGITOS = 35;
-  /** RegularExpression Id. */
-  int SINAL = 36;
-  /** RegularExpression Id. */
-  int DIGITO = 37;
-  /** RegularExpression Id. */
-  int FRACAO_OPCIONAL = 38;
-  /** RegularExpression Id. */
-  int EXPOENTE_OPCIONAL = 39;
+  int OPERADOR_RELACIONAL = 34;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -100,30 +90,28 @@ public interface PascalConstants {
     "\")\"",
     "\";\"",
     "\":\"",
-    "\"array\"",
     "\"[\"",
     "\"]\"",
-    "\".\"",
+    "\"array\"",
+    "<NUM>",
+    "\"..\"",
     "\"begin\"",
     "\"end\"",
-    "\":=\"",
     "\"if\"",
     "\"then\"",
     "\"else\"",
     "\"while\"",
     "\"do\"",
-    "\",\"",
     "\"not\"",
+    "\",\"",
     "<OPERADOR_MULTIPLICATIVO>",
-    "<OPERADOR_ADITIVO>",
+    "\"or\"",
     "<ID>",
+    "\":=\"",
     "<OPERADOR_RELACIONAL>",
-    "<NUM>",
-    "<DIGITOS>",
-    "<SINAL>",
-    "<DIGITO>",
-    "<FRACAO_OPCIONAL>",
-    "<EXPOENTE_OPCIONAL>",
+    "\".\"",
+    "\"+\"",
+    "\"-\"",
   };
 
 }
