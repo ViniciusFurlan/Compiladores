@@ -1,0 +1,344 @@
+PARSER_BEGIN(Pascal)
+import java.io.*;
+public class Pascal {
+
+  public static void main(String args[]) throws ParseException,IOException {
+
+    Pascal parser = new Pascal(new FileInputStream(args[0]));
+    parser.Programa();
+  }
+
+}
+
+PARSER_END(Pascal)
+
+SKIP :
+{
+  " "
+| "\t"
+| "\n"
+| "\r"
+}
+
+TOKEN :
+{
+  <PROGRAM: "program">
+| <INTEIRO: "integer">
+| <REAL: "real">
+| <VAR: "var">
+| <OF: "of">
+| <FUNCTION: "function">
+| <PROCEDURE: "procedure">
+| <LBRACE:"(">
+| <RBRACE: ")">
+| <SEMI: ";">
+| <COLON: ":">
+| <ARRAY: "array">
+| <LBRACKET: "[">
+| <RBRACKET: "]">
+| <PERIOD: ".">
+| <BEGIN: "begin">
+| <END: "end">
+| <ATRIB: ":=">
+| <IF: "if">
+| <THEN: "then">
+| <ELSE: "else">
+| <WHILE: "while">
+| <DO: "do">
+| <COMMA: ",">
+| <NOT: "not">
+}
+
+TOKEN :
+{
+<OPERADOR_MULTIPLICATIVO: ("*"|"/"|"div"|"mod"|"and")>
+|
+<OPERADOR_ADITIVO: ("+"| "-" | "or")>
+|
+< ID: ["a"-"z","A"-"Z"] ( ["a"-"z","A"-"Z","0"-"9"])*>
+|
+<OPERADOR_RELACIONAL: ("="|"<>"|"<"|"<="|">"|">=")>
+|
+<NUM: <DIGITOS> (<FRACAO_OPCIONAL>)? (<EXPOENTE_OPCIONAL>)?>
+|
+<DIGITOS: <DIGITO>(<DIGITO>)*>
+|
+<SINAL: "+" | "-" >
+|
+<DIGITO: ["0"-"9"]>
+|
+<FRACAO_OPCIONAL: <PERIOD><DIGITOS> >
+|
+<EXPOENTE_OPCIONAL: "E" (<SINAL>)? <DIGITOS> >
+}
+
+
+void Programa () :
+{Token t1,t2,t3,t4,t5; String
+retornoLID, retornoDecl, retornoDeclSubProg, retornoEnun;}
+{ t1 = <PROGRAM> t2 = <ID>
+  t3 = <LBRACE> retornoLID = Lista_de_identificadores() t4 = <RBRACE> t5 = <SEMI>
+   retornoDecl = Declaracoes()
+   retornoDeclSubProg = Declaracoes_de_subprogramas()
+   retornoEnun = Enunciado_composto("") "."
+  <EOF>
+  {System.out.print(t1 + " " + t2 + " ");}
+  {System.out.println(t3+retornoLID+t4+t5);}
+  {System.out.print(retornoDecl);}
+  {System.out.print(retornoDeclSubProg);}
+  {System.out.print(retornoEnun);}
+  {System.out.println(".");}
+}
+
+
+String Lista_de_identificadores():
+{Token t1; String retornoL2, saida;}
+{
+  t1 = <ID> retornoL2 = Lista2()
+  {saida = t1.image + retornoL2; return saida;}
+}
+
+String Lista2():
+{Token t1; String retornoL2, saida="";}
+{
+ ("," t1 = <ID> retornoL2 = Lista2() {saida = ", "+t1.image+retornoL2; return saida;}  )?
+ {return saida;}
+}
+
+String Declaracoes():
+{Token t1,t2,t3; String retornoLID, retornoTipo, retornoDecl, saida="";}
+{
+  (t1 = <VAR> retornoLID = Lista_de_identificadores() t2 = <COLON> retornoTipo = Tipo() t3 = <SEMI> retornoDecl = Declaracoes()
+  {saida = t1.image+" "+retornoLID+" "+t2.image+" "+retornoTipo+" "+t3.image+"\n"+retornoDecl; return saida;} )?
+  {return saida;}
+}
+
+String Tipo():
+{Token t1,t2,t3,t4,t5,t6,t7,t8; String retTipoP,saida=""; }
+{
+  retTipoP = Tipo_padrao() {return retTipoP;}
+  | t1 = <ARRAY> t2 = <LBRACKET> t3 = <NUM> t4 = <PERIOD> t5 = <PERIOD> t6 = <NUM> t7 = <RBRACKET> t8 = <OF> retTipoP = Tipo_padrao()
+  {saida = t1.image+t2.image+t3.image+t4.image+t5.image+t6.image+t7.image+t8.image+retTipoP; return saida;}
+}
+
+String Tipo_padrao():
+{Token t1; String saida;}
+{
+  t1 = <INTEIRO> {saida = t1.image; return saida;}
+  | t1 = <REAL> {saida = t1.image; return saida;}
+
+}
+
+String Declaracoes_de_subprogramas():
+{String ret1, ret2, saida="";}
+{
+  ret1 = Declaracoes_de_subprograma()
+    {saida = ret1;return saida;}
+}
+
+String Declaracoes_de_subprograma():
+{Token t1;String ret1, ret2, ret3, saida="";}
+{
+  (ret1 = Cabecalho_de_subprograma() ret2 = Declaracoes() ret3 = Enunciado_composto("") t1 = <SEMI>
+  {saida = ret1+ret2+ret3+t1.image+"\n"; return saida;}
+  )*
+  {return saida;}
+
+}
+String Cabecalho_de_subprograma():
+{Token t1,t2,t3,t4,t5,t6,t7; String ret1,ret2,ret3, saida="";}
+{
+  t1 = <FUNCTION> t2 = <ID> ret1 = Argumentos() t3 = <COLON> ret2 = Tipo_padrao() t4 = <SEMI>
+  {saida= t1.image+" "+t2.image+ret1+t3.image+ret2+t4.image+"\n"; return saida;}
+  | t5 = <PROCEDURE> t6 = <ID> ret3 = Argumentos() t7 = <SEMI>
+  {saida = t5.image+" "+t6.image+ret3+t7.image+"\n"; return saida;}
+}
+
+String Argumentos():
+{Token t1,t2; String ret, saida="";}
+{
+  (t1 = <LBRACE> ret = Lista_de_parametros() t2 = <RBRACE>
+  {saida = t1.image+ret+t2.image; return saida;}
+  )?
+  {return saida;}
+}
+
+String Lista_de_parametros():
+{Token t1; String ret1, ret2, ret3, saida="";}
+{
+  ret1 = Lista_de_identificadores() t1 = <COLON> ret2 = Tipo()
+  ret3 = Lista_de_parametros2()
+  {saida = ret1+t1.image+ret2+ret3;return saida;}
+}
+
+String Lista_de_parametros2():
+{Token t1,t2; String ret1,ret2,ret3,saida="";}
+{
+  (t1 = <SEMI> ret1 = Lista_de_identificadores() t2 = <COLON> ret2 = Tipo() ret3 = Lista_de_parametros2()
+    {saida = t1.image+ret1+t2.image+ret2+ret3;return saida;}
+  )?
+    {return saida;}
+}
+
+String Enunciado_composto(String entrada):
+{Token t1,t2;String ret1,saida="";}
+{
+  t1 = <BEGIN> ret1 = Enunciados_opcionais(entrada+"  ") t2 = <END>
+  {saida = entrada+t1.image+"\n"+ret1+"\n"+entrada+t2.image;return saida;}
+}
+
+String Enunciados_opcionais(String entrada):
+{String ret1, saida="";}
+{
+  (ret1 = Lista_de_enunciados(entrada)
+  {saida = ret1; return saida;}
+  )?
+  {return saida;}
+}
+
+String Lista_de_enunciados(String entrada):
+{String ret1, ret2, saida="";}
+{
+  ret1 = Enunciado(entrada) ret2 = Lista_de_enunciados2(entrada)
+  {saida = ret1+ret2;return saida;}
+}
+
+String Lista_de_enunciados2(String entrada):
+{Token t1; String ret1, ret2, saida="";}
+{
+  (t1 = <SEMI> ret1 = Enunciado(entrada) ret2 = Lista_de_enunciados2(entrada)
+  {saida = t1.image+"\n"+ret1+ret2;return saida;}
+  )?
+  {return saida;}
+}
+
+String Enunciado(String entrada):
+{Token t1,t2,t3; String ret1, ret2, ret3, saida="";}
+{
+  t1 = <ID> ret1 = Enunciado2()
+    {saida = entrada+t1.image+" "+ret1;return saida;}
+  | ret1 = Enunciado_composto(entrada)
+    {saida = ret1;return saida;}
+  | t1 = <IF> ret1 = Expressao() t2 = <THEN> ret2 = Enunciado(entrada+"  ") t3 = <ELSE> ret3 = Enunciado(entrada+"  ")
+    {saida = entrada+t1.image+" "+ret1+" "+t2.image+"\n"+ret2+"\n"+entrada+t3.image+"\n"+ret3;return saida;}
+  | t1 = <WHILE> ret1 = Expressao() t2 = <DO> ret2 = Enunciado(entrada+"  ")
+    {saida = entrada+t1.image+" "+ret1+" "+t2.image+"\n"+ret2;return saida;}
+}
+String Enunciado2():
+{Token t1; String ret1, ret2, saida;}
+{
+  ret1 = Variavel() t1 = <ATRIB> ret2 = Expressao()
+    {saida = ret1+t1.image+" "+ret2;return saida;}
+  | ret1 = Chamada_de_procedimento()
+    {saida = "\b"+ret1;return saida;}
+}
+
+String Variavel():
+{Token t1, t2; String ret1, saida="";}
+{
+  (t1 = <LBRACKET> ret1 = Expressao() t2 = <RBRACKET>
+  {saida = t1.image+ret1+t2.image;return saida;}
+  )?
+  {return saida;}
+}
+String Chamada_de_procedimento():
+{Token t1, t2; String ret1, saida="";}
+{
+   (t1 = <LBRACE> ret1 = Lista_de_expressoes() t2 = <RBRACE>
+    {saida = t1.image+ret1+t2.image;return saida;}
+   )?
+    {return saida;}
+}
+
+String Lista_de_expressoes():
+{String ret1, ret2, saida="";}
+{
+  ret1 = Expressao() ret2 = Lista_de_expressoes2()
+    {saida = ret1+ret2;return saida;}
+}
+
+String Lista_de_expressoes2():
+{Token t1; String ret1, saida="";}
+{
+  (t1 = <COMMA> ret1 = Expressao()
+    {saida = t1.image+ret1;return saida;}
+  )?
+    {return saida;}
+}
+
+String Expressao():
+{String ret1, ret2, saida="";}
+{
+  ret1 = Expressao_simples() ret2 = Expressao2()
+    {saida = ret1+ret2;return saida;}
+}
+String Expressao2():
+{Token t1; String ret1, saida="";}
+{
+  (t1 = <OPERADOR_RELACIONAL> ret1 = Expressao_simples()
+    {saida = t1.image+ret1;return saida;}
+  )?
+    {return saida;}
+}
+
+String Expressao_simples():
+{String ret1, ret2, ret3, saida="";}
+{
+  ret1 = Termo() ret2 = Expressao_simples2()
+   {saida = ret1+ret2;return saida;}
+  | ret1 = Sinal() ret2 = Termo() ret3 = Expressao_simples2()
+   {saida = ret1+ret2+ret3;return saida;}
+}
+
+String Expressao_simples2():
+{Token t1; String ret1, ret2, saida="";}
+{
+  (t1 = <OPERADOR_ADITIVO> ret1 = Termo() ret2 = Expressao_simples2()
+    {saida = " "+t1.image+" "+ret1+ret2;return saida;}
+  )?
+  {return saida;}
+}
+
+String Termo():
+{String ret1, ret2, saida="";}
+{
+  ret1 = Fator() ret2 = Termo2()
+   {saida = ret1+ret2;return saida;}
+}
+
+String Termo2():
+{Token t1; String ret1, ret2, saida="";}
+{
+  (t1 = <OPERADOR_MULTIPLICATIVO> ret1 = Fator() ret2 = Termo2()
+    {saida = " "+t1.image+" "+ret1+ret2;return saida;}
+  )?
+    {return saida;}
+}
+
+String Fator():
+{Token t1, t2; String ret1, saida="";}
+{
+  t1 = <ID> ret1 = Fator2()
+    {saida = t1.image+ret1;return saida;}
+  | t1 = <NUM>
+    {saida = t1.image;return saida;}
+  | t1 = <LBRACE> ret1 = Expressao() t2 = <RBRACE>
+    {saida = t1.image+ret1+t2.image;return saida;}
+  | t1 = <NOT> ret1 = Fator()
+    {saida = t1.image+ret1;return saida;}
+}
+
+String Fator2():
+{Token t1, t2; String ret1, saida="";}
+{
+  (t1 = <LBRACE> ret1 = Lista_de_expressoes() t2 = <RBRACE>
+    {saida = t1.image+ret1+t2.image;return saida;}
+  )?
+    {return saida;}
+}
+
+String Sinal():
+{Token t1; String saida="";}
+{
+  t1 = <SINAL> {saida = t1.image;return saida;}
+}
